@@ -1,14 +1,12 @@
-#JotTouchSDK V2.0
-
-##V2.0
+#JotTouchSDK V2.6
 Please provide any bugs or feedback reports to developers@adonit.net.
 
 ##Overview
 The Adonit Jot Touch SDK is a free framework for iOS that provides you with the necessary tools to integrate a complete sketching experience in your apps when used with a Jot Touch. You can learn more about Jot Touches at http://adonit.net/jot/touch/ . It includes support for for the following features:
 
-- Jot Touch 4 and Jot Script Styli.
-- Pressure Sensitivity (JT4 only)
-- Shortcut Buttons (JT4 only)
+- Jot Touch 4, Jot Touch Pixel Point, Jot Script
+- Pressure Sensitivity
+- Shortcut Buttons
 - Palm Rejection
 - Battery level
 - Settings UI

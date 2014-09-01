@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>B3F9BFA8-9C07-4FF1-9B83-846DBB94D62E</string>
+	<string>B48F7FFA-C239-4768-986D-48281AFE5A92</string>
 	<key>IDESourceControlProjectName</key>
 	<string>JotTouchExample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>0F4E4595-F264-4B28-AD37-4969C903D6C0</key>
+		<key>914989C2-598E-4C1E-87A6-2400138B2CB9</key>
 		<string>https://github.com/Adonit/JotTouchSDK.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Example/JotTouchExample.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>0F4E4595-F264-4B28-AD37-4969C903D6C0</key>
+		<key>914989C2-598E-4C1E-87A6-2400138B2CB9</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>0F4E4595-F264-4B28-AD37-4969C903D6C0</string>
+	<string>914989C2-598E-4C1E-87A6-2400138B2CB9</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0F4E4595-F264-4B28-AD37-4969C903D6C0</string>
+			<string>914989C2-598E-4C1E-87A6-2400138B2CB9</string>
 			<key>IDESourceControlWCCName</key>
 			<string>JotTouchSDK</string>
 		</dict>

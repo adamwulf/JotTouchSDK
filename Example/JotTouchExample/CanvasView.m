@@ -16,6 +16,7 @@
 #import "CurveToPathElement.h"
 #import "UIColor+Components.h"
 #import "ViewController.h"
+#import "Constants.h"
 
 @interface CanvasView (){
     @private
@@ -42,13 +43,17 @@
     // these arrays will act as stacks for our undo state
     __strong NSMutableArray* stackOfStrokes;
     __strong NSMutableArray* stackOfUndoneStrokes;
+    
+    BOOL _frameBufferCreated;
 }
+
+@property (nonatomic) UITapGestureRecognizer *doubleTapGestureRecognizer;
+
 @end
 
 @implementation CanvasView
 
 @synthesize viewController;
-
 
 #pragma mark - Initialization
 
@@ -56,7 +61,8 @@
  * Implement this to override the default layer class (which is [CALayer class]).
  * We do this so that our view will be backed by a layer that is capable of OpenGL ES rendering.
  */
-+ (Class) layerClass{
++ (Class) layerClass
+{
 	return [CAEAGLLayer class];
 }
 
@@ -96,8 +102,7 @@
                                toColor:[self colorForPressure:touch.pressure]];
         
         //Set JotTouchStatusIndicator labels
-        [self.viewController.numberLabel setText:[NSString stringWithFormat:@"%u", touch.pressure]];
-        [self.viewController.numberLabel setNeedsDisplay];
+        [self.viewController.jotSatusIndicatorContainerView.pressureLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)touch.pressure]];
     }
 }
 
@@ -112,8 +117,7 @@
                                toColor:[self colorForPressure:touch.pressure]];
         
         //Set JotTouchStatusIndicator labels
-        [self.viewController.numberLabel setText:[NSString stringWithFormat:@"%u", touch.pressure]];
-        [self.viewController.numberLabel setNeedsDisplay];
+        [self.viewController.jotSatusIndicatorContainerView.pressureLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)touch.pressure]];
     }
 }
 
@@ -131,20 +135,18 @@
                                toColor:[self colorForPressure:touch.pressure]];
         
         //Set JotTouchStatusIndicator labels
-        [self.viewController.numberLabel setText:[NSString stringWithFormat:@"%u", touch.pressure]];
-        [self.viewController.numberLabel setNeedsDisplay];
-
+        [self.viewController.jotSatusIndicatorContainerView.pressureLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)touch.pressure]];
         
         // this stroke is now finished, so add it to our completed strokes stack
         // and remove it from the current strokes, and reset our undo state if any
         [stackOfStrokes addObject:currentStroke];
         [currentStrokes removeObjectForKey:@([touch hash])];
+        
         [stackOfUndoneStrokes removeAllObjects];
     }
     
     //Set JotTouchStatusIndicator labels back to default
-    [self.viewController.numberLabel setText:@"none"];
-    [self.viewController.numberLabel setNeedsDisplay];
+    [self.viewController.jotSatusIndicatorContainerView.pressureLabel setText:@"none"];
 }
 
 /**
@@ -161,17 +163,19 @@
     [self renderAllStrokes];
 }
 
--(void)jotSuggestsToDisableGestures{
+- (void)jotSuggestsToDisableGestures
+{
+    self.doubleTapGestureRecognizer.enabled = NO;
     // disable any other gestures, like a pinch to zoom
     [self.viewController jotSuggestsToDisableGestures];
 }
 
--(void)jotSuggestsToEnableGestures{
+- (void)jotSuggestsToEnableGestures
+{
+    self.doubleTapGestureRecognizer.enabled = YES;
     // enable any other gestures, like a pinch to zoom
     [viewController jotSuggestsToEnableGestures];
 }
-
-
 
 #pragma mark - UITouch Events
 
@@ -259,8 +263,9 @@
  * calculate the width from the input touch's pressure
  */
 -(CGFloat) widthForPressure:(CGFloat)pressure{
-    CGFloat minSize = 8; // was 10
-    CGFloat maxSize = 35; // was 20
+    CGFloat minSize = 2;
+    CGFloat maxSize = 35;
+    
     return minSize + (maxSize-minSize) * pressure / JOT_MAX_PRESSURE;
 }
 
@@ -268,19 +273,26 @@
  * calculate the color from the input touch's color
  */
 -(UIColor*) colorForPressure:(CGFloat)pressure{
-    CGFloat minAlpha = .7;
-    CGFloat maxAlpha = .9;
+   CGFloat minAlpha = .7;
+   CGFloat maxAlpha = .9;
+
     CGFloat segmentAlpha = minAlpha + (maxAlpha-minAlpha) * pressure / JOT_MAX_PRESSURE;
     if(segmentAlpha < minAlpha) segmentAlpha = minAlpha;
     return [UIColor colorWithRed:0.078 green:0.078 blue:0.078 alpha:segmentAlpha];
 }
 
-
+- (void)doubleTapped:(UITapGestureRecognizer *)recognizer {
+    NSLog(@"Double Tap Gesture Recognized");
+}
 
 #pragma mark - OpenGL Helpers
 
--(id) finishInit{
-
+-(id) finishInit
+{
+    _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapped:)];
+    _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+    [self addGestureRecognizer:_doubleTapGestureRecognizer];
+    
     //
     // this view should accept Jot stylus touch events
     [[JotStylusManager sharedInstance] registerView:self];
@@ -342,21 +354,27 @@
  * This is the perfect opportunity to also update the framebuffer so that it is
  * the same size as our display area.
  */
--(void)layoutSubviews{
+-(void)layoutSubviews
+{
     // check if we have a framebuffer at all
     // if not, then we'll make sure to clear
     // it when we first create it
     BOOL needsErase = (BOOL) viewFramebuffer;
     
-	[EAGLContext setCurrentContext:context];
-	[self destroyFramebuffer];
-	[self createFramebuffer];
+    if (!_frameBufferCreated)
+    {
+        [EAGLContext setCurrentContext:context];
+        
+        [self destroyFramebuffer];
+        [self createFramebuffer];
 	
-	// Clear the framebuffer the first time it is allocated
-	if (needsErase) {
-		[self clear];
-		needsErase = NO;
-	}
+        // Clear the framebuffer the first time it is allocated
+        if (needsErase) {
+            [self clear];
+        }
+        
+        _frameBufferCreated = YES;
+    }
 }
 
 /**
@@ -510,7 +528,7 @@
         glVertexPointer(2, GL_FLOAT, sizeof(struct Vertex), &vertexBuffer[0].Position[0]);
         glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(struct Vertex), &vertexBuffer[0].Color[0]);
         glPointSizePointerOES(GL_FLOAT, sizeof(struct Vertex), &vertexBuffer[0].Size);
-        glDrawArrays(GL_POINTS, 0, [element numberOfSteps]);
+        glDrawArrays(GL_POINTS, 0, (int)[element numberOfSteps]);
     }
     
     if(includePrep){
@@ -686,12 +704,14 @@
     CGGradientRef myGradient = CGGradientCreateWithColorComponents (myColorspace, components, locations, num_locations);
     
     CGPoint myCentrePoint = CGPointMake(32, 32);
-    float myRadius = 20;
+    CGFloat myRadius = 20.0f;
     
     CGContextDrawRadialGradient (UIGraphicsGetCurrentContext(), myGradient, myCentrePoint,
                                  0, myCentrePoint, myRadius,
                                  kCGGradientDrawsAfterEndLocation);
-    
+
+    CGGradientRelease(myGradient);
+    CGColorSpaceRelease(myColorspace);
     UIGraphicsPopContext();
     
     [self setBrushTexture:UIGraphicsGetImageFromCurrentImageContext()];
@@ -724,7 +744,7 @@
         // Allocate  memory needed for the bitmap context
         GLubyte* brushData = (GLubyte *) calloc(width * height * 4, sizeof(GLubyte));
         // Use  the bitmatp creation function provided by the Core Graphics framework.
-        CGContextRef brushContext = CGBitmapContextCreate(brushData, width, height, 8, width * 4, CGImageGetColorSpace(brushCGImage), kCGImageAlphaPremultipliedLast);
+        CGContextRef brushContext = CGBitmapContextCreate(brushData, width, height, 8, width * 4, CGImageGetColorSpace(brushCGImage), (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
         // After you create the context, you can draw the  image to the context.
         CGContextDrawImage(brushContext, CGRectMake(0.0, 0.0, (CGFloat)width, (CGFloat)height), brushCGImage);
         // You don't need the context at this point, so you need to release it to avoid memory leaks.
@@ -736,13 +756,11 @@
         // Set the texture parameters to use a minifying filter and a linear filer (weighted average)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         // Specify a 2D texture image, providing the a pointer to the image data in memory
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, brushData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, brushData);
         // Release  the image data; it's no longer needed
         free(brushData);
     }
 }
-
-
 
 #pragma mark - dealloc
 
@@ -751,6 +769,8 @@
  */
 - (void) dealloc
 {
+    [[JotStylusManager sharedInstance] unregisterView:self];
+    
     [self destroyFramebuffer];
     
 	if (brushTexture){
@@ -761,8 +781,5 @@
 		[EAGLContext setCurrentContext:nil];
 	}
 }
-
-
-
 
 @end

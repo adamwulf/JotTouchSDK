@@ -1,5 +1,64 @@
 #JotTouchSDK Change Log
 
+# V2.6.1
+- fix a possible conflict with popular UIColor category that added red/green/blue methods
+- fix caching issue with pen commands
+- fix a tableview inconsistency crash when showing the settings detail view and switching apps
+
+# V2.6
+- Added the ability to report diagnostic and usage data
+- Fixed pressure curve issues with some Jot Touch Pixel Points
+- Allow suggestionToEnableGestureDelay to be zero
+- Miscellaneous bug fixes and improvements
+
+# V2.5.3
+- Added the ability to turn line smoothing on or off
+
+# V2.5.2
+- Press-and-Hold Settings View controller now works on iOS 6
+- Fixed an issue where palm rejection setting switch was not working for script
+
+# V2.5.1
+- update the shortcut screen in settings UI to include JTPP
+- fix alignment issue when selecting shortcut button
+
+# V2.5 Public Release
+- see UPDATE.md for a rundown of API changes in this release
+- fixed numerous bugs when running on legacy iOS 6 devices
+- added ability for SDK to update configuration settings. 
+  this will allow us to support future iOS devices without
+  requiring apps to distribute new builds.
+- updated example app to support new API changes
+
+# V2.1.0.844 Beta 1
+- see UPDATE.md for a rundown of API changes in this release
+- better offset calculations based on writing style and stylus angle
+- improved behavior of JotTouch events when other gestures cancel touches
+- only enable JotTouches when stylus connected
+- add gesture recognizers to view instead of window
+- allow user to control whether BT warning dialog appears
+- misc bug fixes and cleanup
+
+
+# V2.1.0.832 Alpha 4
+- fix to forgetAndTurnOffStylus
+- new press-and-hold connection settings view controller.
+- JotShortcut now has a shortText property
+- renamed the gesture enable delay property to suggestToEnableGestureDelay
+
+# V2.1.0.827 Alpha 3
+- fix connection issue with tap style when BT is not initialized
+- fix example app to use legacy connection style
+
+# V2.1.0.823 Alpha 2
+- update for new JTPP and Adobe Ink models
+- new writing style enums
+- switch to standard #import <JotTouchSDK/JotTouchSDK.h> header style
+- new press-and-hold connection style support
+- new JotPalmGestureRecognizer interaction model to avoid spurious gestures
+- many bugfixes and improvements
+
+
 # V2.0.6.497
 - fix issue where enabling the SDK can cause disconnects from pens
 
