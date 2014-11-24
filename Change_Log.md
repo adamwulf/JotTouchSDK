@@ -1,5 +1,29 @@
 #JotTouchSDK Change Log
 
+# V2.6.4
+- NOTE: JotTouchSDK now requires SytemConfiguration.framework to be added to apps
+- SDK uses reachability to detect when it can download updated configuration file
+- fixes issues with iPad Air 2 and wavy-lines
+- fixes issues with iPad mini 3 and wavy-lines
+- improved wavy-line correction for older iPads
+- fixes excessive failed battery check logging
+- fixes crash when app goes into the background
+- other miscellaneous bug fixes and improvements
+
+
+# V2.6.3
+- fixes issue where SDK might disconnect from a stylus that goes off screen
+- fixes issue with sending commands to already disconnected stylii during connection process
+
+# V2.6.2
+- fixes offset and palm rejection issues when compiled against iOS 8 SDK with Xcode 6
+- fixes issues around registering/unregistering views that could cause a leak
+- fixes a crash when switching between different Jot stylii
+- fixes issues where JotTouch events could arrive out of order or multiple times
+- fixes issues where stylii could disconnect unexpectedly
+- fixes issues where palm rejection could interfere with gesture recognizers
+- other miscellaneous bug fixes and improvements
+
 # V2.6.1
 - fix a possible conflict with popular UIColor category that added red/green/blue methods
 - fix caching issue with pen commands

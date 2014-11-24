@@ -3,7 +3,6 @@
 //
 //  Created on 8/20/12.
 //  Copyright (c) 2012 Adonit. All rights reserved.
-// this is a NOOP change
 //
 
 #import <Foundation/Foundation.h>
@@ -103,6 +102,13 @@ extern NSString * const JotStylusManagerDiscoveryAttemptedButBluetoothOffNotific
  * @param view A view that will no longer receiver touch events from Jot styluses
  */
 - (void)unregisterView:(UIView *)view;
+
+/**
+ * Returns YES if the view is registered with the stylus manager, otherwise NO.
+ *
+ * @param view The view whose registration status is in question
+ */
+- (BOOL)isViewRegistered:(UIView *)view;
 
 /**
  * Opens the appropriate help site for the currently connected stylus
@@ -228,7 +234,7 @@ extern NSString * const JotStylusManagerDiscoveryAttemptedButBluetoothOffNotific
 /**
  * Palm rejection delegate capturing touch events for palm rejection
  */
-@property (readwrite,assign) id<JotPalmRejectionDelegate> palmRejectorDelegate;
+@property (nonatomic, weak) id<JotPalmRejectionDelegate> palmRejectorDelegate;
 
 /**
  * The version of the SDK
@@ -261,6 +267,13 @@ extern NSString * const JotStylusManagerDiscoveryAttemptedButBluetoothOffNotific
  * and the device's screen. The default value is YES.
  */
 @property (nonatomic) BOOL lineSmoothingEnabled;
+
+/**
+ * This property determines the amount of final smoothing applied to our dewiggle alogorithms on our Pixelpoint Pens.
+ * This smoothing is to remove noise in our dewiggle alogorithm and should not be lowered or modified unless it is
+ * being replaced by your apps own smoothing method.  The default value is 0.80, and accepts any value between 0.0 and 1.0.
+ */
+@property (nonatomic) CGFloat lineSmoothingAmount;
 
 /**
  * The current status of pairing styluses
@@ -299,10 +312,7 @@ extern NSString * const JotStylusManagerDiscoveryAttemptedButBluetoothOffNotific
 
 //INTERNAL USE ONLY
 
--(void)touchesBegan:(NSSet *)touches;
--(void)touchesMoved:(NSSet *)touches;
--(void)touchesEnded:(NSSet *)touches;
--(void)touchesCancelled:(NSSet *)touches;
--(void)setOptionValue:(id)value forKey:(NSString *)key;
+- (BOOL)setOptionValue:(id)value forKey:(NSString *)key;
+- (id)optionValueForKey:(NSString *)key;
 
 @end

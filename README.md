@@ -1,4 +1,8 @@
-#JotTouchSDK V2.6
+#JotTouchSDK V2.6.4
+
+## NOTE ##
+JotTouchSDK v2.6.4 now requires apps to add the SystemConfiguration.framework to their Frameworks build settings if they do not already do so.
+
 Please provide any bugs or feedback reports to developers@adonit.net.
 
 ##Overview
@@ -17,7 +21,7 @@ Integrating with the Adonit Jot Touch SDK is as easy as adding a framework to yo
 http://github.com/Adonit/JotTouchSDK/wiki/Getting-Started-Guide
 
 ##What is the target?
-The JotTouchSDK Targets iOS 7.0 but continues to support iOS 6.0
+The JotTouchSDK Targets iOS 7.0 and 8.0. iOS 6 support is considered deprecated, and will be going away in an upcoming SDK release.
 
 ##API Documentation.
 View the the documentation of all available methods and properties in the GitHub wiki here. 

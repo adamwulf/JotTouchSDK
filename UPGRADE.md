@@ -1,9 +1,12 @@
+# JotTouchSDK 2.6.4 Upgrade Notes
+
+JotTouchSDK version 2.6.4 requires an additional system framework to be linked against your app. This new framework is the SystemConfiguration.framework, and is used by the SDK to detect when it can download updated configuration data for new iPad, iPhone and stylus hardware.
+
 # JotTouchSDK 2.6 Upgrade Notes
 
-Upgrading from any 2.5.x release should require no code changes on your part. However, there are two new pieces of API to be aware of:
+Upgrading from any 2.5.x release should require no code changes on your part.
 
-- A new option on JotStylusManager called reportDiagnosticData. Turning this option on will help us to create better solutions based
-    on how customers use our products.
+However, there is one new new option on JotStylusManager called reportDiagnosticData. Surfacing this option to your users will help us create better solutions and provide a better customer service experience to both of our customers. To learn more about what data is collected and how its used, please visit http://www.adonit.net/privacy-policy/#sdk.
 
 # JotTouchSDK 2.5 Upgrade Notes
 
